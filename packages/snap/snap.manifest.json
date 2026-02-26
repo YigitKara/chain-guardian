@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Chain Guardian — protects your transactions from cross-chain address mistakes.",
   "proposedName": "Chain Guardian",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/YigitKara/chain-guardian.git"
   },
   "source": {
-    "shasum": "EeZUJoFOzkN49EIb1/rcJgUIMz4h9eMLMrw4FnI8C8g=",
+    "shasum": "zM+wZBulUfc0PrbTQSvDhOWVoo61edB5sbSrTWJveCE=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
