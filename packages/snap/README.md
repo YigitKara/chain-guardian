@@ -1,12 +1,42 @@
-# TypeScript Example Snap
+# Chain Guardian
 
-This snap demonstrates how to develop a snap with TypeScript. It is a simple
-snap that displays a confirmation dialog when the `hello` JSON-RPC method is
-called.
+Chain Guardian protects your crypto transactions from one of the most common and costly mistakes in web3: sending funds to an address on the wrong blockchain network.
 
-## Testing
+## What it does
 
-The snap comes with some basic tests, to demonstrate how to write tests for
-snaps. To test the snap, run `yarn test` in this directory. This will use
-[`@metamask/snaps-jest`](https://github.com/MetaMask/snaps/tree/main/packages/snaps-jest)
-to run the tests in `src/index.test.ts`.
+Every time you send a transaction in MetaMask, Chain Guardian automatically analyzes the destination address and checks if it is compatible with the network you are currently on. The result appears directly in your transaction confirmation screen before you click confirm.
+
+## Supported networks
+
+- EVM chains (Ethereum, Polygon, BNB Smart Chain, Avalanche, Optimism, Arbitrum, Base, Linea, Fantom, Cronos)
+- Solana
+- Bitcoin (Legacy, SegWit, and Bech32 formats)
+- Tron
+- XRP / Ripple
+- Litecoin
+- Cardano
+- Cosmos
+- Polkadot
+- Stellar
+
+## How to use
+
+Install Chain Guardian and it works automatically. No configuration needed. Every transaction you initiate in MetaMask will be analyzed instantly.
+
+## Warning types
+
+- Green checkmark: Compatible address. Safe to proceed.
+- Red warning: Wrong chain detected. Funds would be permanently lost. Chain Guardian suggests bridges to use instead.
+- Yellow warning: Unrecognized format. Proceed with caution.
+
+## Support
+
+https://github.com/YigitKara/chain-guardian/issues
+
+## Source code
+
+https://github.com/YigitKara/chain-guardian
+
+## npm package
+
+https://www.npmjs.com/package/@yigitkara/chain-guardian
