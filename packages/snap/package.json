@@ -1,15 +1,16 @@
 {
-  "name": "snap",
+  "name": "@yigitkara/chain-guardian",
   "version": "0.1.0",
-  "description": "The 'Hello, world!' of MetaMask Snaps, now written in TypeScript.",
+  "description": "Chain Guardian — a MetaMask Snap that protects your transactions from cross-chain address mistakes.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/YigitKara/chain-guardian.git"
   },
-  "license": "(MIT-0 OR Apache-2.0)",
+  "license": "MIT",
   "main": "./dist/bundle.js",
   "files": [
     "dist/",
+    "images/",
     "snap.manifest.json"
   ],
   "scripts": {

@@ -1,23 +1,25 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example",
+  "description": "Chain Guardian — protects your transactions from cross-chain address mistakes.",
+  "proposedName": "Chain Guardian",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/YigitKara/chain-guardian.git"
   },
   "source": {
-    "shasum": "r7Mf2iZsV0U3aSQIy9eTnY8KIe0Nv90t0q87Cfju4pQ=",
+    "shasum": "EeZUJoFOzkN49EIb1/rcJgUIMz4h9eMLMrw4FnI8C8g=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
-        "packageName": "snap",
+        "iconPath": "images/icon.svg",
+        "packageName": "@yigitkara/chain-guardian",
         "registry": "https://registry.npmjs.org/"
       }
     }
   },
   "initialPermissions": {
     "snap_dialog": {},
+    "endowment:transaction-insight": {},
     "endowment:rpc": {
       "dapps": true,
       "snaps": false

@@ -4,7 +4,6 @@ import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  SendHelloButton,
   Card,
 } from '../components';
 import { defaultSnapOrigin } from '../config';
@@ -100,6 +99,28 @@ const ErrorMessage = styled.div`
   }
 `;
 
+const redButtonStyle = {
+  backgroundColor: '#e41d1d',
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  padding: '12px 24px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: 'bold',
+} as React.CSSProperties;
+
+const greenButtonStyle = {
+  backgroundColor: '#28a745',
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  padding: '12px 24px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: 'bold',
+} as React.CSSProperties;
+
 const Index = () => {
   const { error } = useMetaMaskContext();
   const { isFlask, snapsDetected, installedSnap } = useMetaMask();
@@ -110,17 +131,36 @@ const Index = () => {
     ? isFlask
     : snapsDetected;
 
-  const handleSendHelloClick = async () => {
-    await invokeSnap({ method: 'hello' });
+  const handleTestTransactionClick = async () => {
+    const accounts = (await window.ethereum.request({
+      method: 'eth_requestAccounts',
+    })) as string[];
+    await window.ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: '0x742d35Cc6634C0532925a3b8D4C9C0B4b8E6d8A2',
+          value: '0x0',
+        },
+      ],
+    });
+  };
+
+  const previewWarning = async (address: string) => {
+    await invokeSnap({
+      method: 'previewWarning',
+      params: { address, chainId: 'eip155:1' },
+    });
   };
 
   return (
     <Container>
       <Heading>
-        Welcome to <Span>template-snap</Span>
+        Welcome to <Span>Chain Guardian</Span>
       </Heading>
       <Subtitle>
-        Get started by editing <code>src/index.tsx</code>
+        Protecting your transactions from cross-chain mistakes
       </Subtitle>
       <CardContainer>
         {error && (
@@ -144,7 +184,7 @@ const Index = () => {
             content={{
               title: 'Connect',
               description:
-                'Get started by connecting to and installing the example snap.',
+                'Get started by connecting to and installing the Chain Guardian snap.',
               button: (
                 <ConnectButton
                   onClick={requestSnap}
@@ -173,29 +213,138 @@ const Index = () => {
         )}
         <Card
           content={{
-            title: 'Send Hello message',
+            title: '✅ Test Valid Transaction',
             description:
-              'Display a custom message within a confirmation screen in MetaMask.',
+              'Send a test transaction to a valid EVM address and see the green insight panel.',
             button: (
-              <SendHelloButton
-                onClick={handleSendHelloClick}
+              <button
+                onClick={handleTestTransactionClick}
                 disabled={!installedSnap}
-              />
+                style={greenButtonStyle}
+              >
+                Test Valid Address
+              </button>
             ),
           }}
           disabled={!installedSnap}
-          fullWidth={
-            isMetaMaskReady &&
-            Boolean(installedSnap) &&
-            !shouldDisplayReconnectButton(installedSnap)
-          }
+        />
+        <Card
+          content={{
+            title: '🚨 Preview Solana Warning',
+            description: 'Preview warning for a Solana address.',
+            button: (
+              <button
+                onClick={() => previewWarning('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview Solana
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
+        />
+        <Card
+          content={{
+            title: '🚨 Preview Bitcoin Warning',
+            description: 'Preview warning for a Bitcoin address.',
+            button: (
+              <button
+                onClick={() => previewWarning('1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview Bitcoin
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
+        />
+        <Card
+          content={{
+            title: '🚨 Preview Tron Warning',
+            description: 'Preview warning for a Tron address.',
+            button: (
+              <button
+                onClick={() => previewWarning('TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview Tron
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
+        />
+        <Card
+          content={{
+            title: '🚨 Preview XRP Warning',
+            description: 'Preview warning for an XRP address.',
+            button: (
+              <button
+                onClick={() => previewWarning('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview XRP
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
+        />
+        <Card
+          content={{
+            title: '🚨 Preview Litecoin Warning',
+            description: 'Preview warning for a Litecoin address.',
+            button: (
+              <button
+                onClick={() => previewWarning('LaMT348PWRnrqeeWArpwQPbuanpXDZGEUz')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview Litecoin
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
+        />
+        <Card
+          content={{
+            title: '🚨 Preview Cosmos Warning',
+            description: 'Preview warning for a Cosmos address.',
+            button: (
+              <button
+                onClick={() => previewWarning('cosmos1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpab8xk9')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview Cosmos
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
+        />
+        <Card
+          content={{
+            title: '🚨 Preview Stellar Warning',
+            description: 'Preview warning for a Stellar address.',
+            button: (
+              <button
+                onClick={() => previewWarning('GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWNA')}
+                disabled={!installedSnap}
+                style={redButtonStyle}
+              >
+                Preview Stellar
+              </button>
+            ),
+          }}
+          disabled={!installedSnap}
         />
         <Notice>
           <p>
-            Please note that the <b>snap.manifest.json</b> and{' '}
-            <b>package.json</b> must be located in the server root directory and
-            the bundle must be hosted at the location specified by the location
-            field.
+            Chain Guardian protects your transactions by detecting address format
+            mismatches across EVM, Solana, Bitcoin, Tron, XRP, Litecoin, Cardano,
+            Cosmos, Polkadot, and Stellar networks.
           </p>
         </Notice>
       </CardContainer>
