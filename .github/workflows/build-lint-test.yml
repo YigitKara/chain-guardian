@@ -32,7 +32,6 @@ jobs:
           name: snap-${{ runner.os }}-${{ github.sha }}
           path: ./packages/snap/dist
           retention-days: 1
-      
 
   lint:
     name: Lint
@@ -46,7 +45,6 @@ jobs:
           is-high-risk-environment: false
       - name: Lint
         run: yarn lint
-     
 
   e2e-test:
     name: End-to-end Test
@@ -65,5 +63,4 @@ jobs:
           name: snap-${{ runner.os }}-${{ github.sha }}
           path: ./packages/snap/dist
       - name: Run e2e tests
-        run: yarn workspace snap run test
-      
+        run: yarn workspace @yigitkara/chain-guardian run test
