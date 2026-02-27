@@ -108,7 +108,7 @@ const redButtonStyle = {
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: 'bold',
-} as React.CSSProperties;
+};
 
 const greenButtonStyle = {
   backgroundColor: '#28a745',
@@ -119,7 +119,7 @@ const greenButtonStyle = {
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: 'bold',
-} as React.CSSProperties;
+};
 
 const Index = () => {
   const { error } = useMetaMaskContext();
