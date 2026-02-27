@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/promise-function-async */
 import styled from 'styled-components';
 
 import {
@@ -131,7 +133,7 @@ const Index = () => {
     ? isFlask
     : snapsDetected;
 
-  const handleTestTransactionClick = () => {
+  const handleTestTransactionClick = async () => {
     const accounts = (await window.ethereum.request({
       method: 'eth_requestAccounts',
     })) as string[];
@@ -147,7 +149,7 @@ const Index = () => {
     });
   };
 
-  const previewWarning = (address: string) => {
+  const previewWarning = async (address: string) => {
     await invokeSnap({
       method: 'previewWarning',
       params: { address, chainId: 'eip155:1' },
