@@ -1,11 +1,8 @@
-import type { OnTransactionHandler, OnRpcRequestHandler } from '@metamask/snaps-sdk';
-import {
-  heading,
-  panel,
-  text,
-  divider,
-  copyable,
+import type {
+  OnRpcRequestHandler,
+  OnTransactionHandler,
 } from '@metamask/snaps-sdk';
+import { copyable, divider, heading, panel, text } from '@metamask/snaps-sdk';
 
 // ============================================================
 // ADDRESS FORMAT DETECTION
@@ -13,58 +10,115 @@ import {
 // Solana check must be LAST among non-EVM since its regex is broadest.
 // ============================================================
 
+/**
+ * Checks if an address is an EVM address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is an EVM address.
+ */
 function isEVMAddress(address: string): boolean {
-  return /^0x[0-9a-fA-F]{40}$/.test(address);
+  return /^0x[0-9a-fA-F]{40}$/u.test(address);
 }
 
+/**
+ * Checks if an address is a Bitcoin address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Bitcoin address.
+ */
 function isBitcoinAddress(address: string): boolean {
   return (
-    /^1[a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(address) ||
-    /^3[a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(address) ||
-    /^bc1[a-z0-9]{39,59}$/.test(address)
+    /^1[a-km-zA-HJ-NP-Z1-9]{25,34}$/u.test(address) ||
+    /^3[a-km-zA-HJ-NP-Z1-9]{25,34}$/u.test(address) ||
+    /^bc1[a-z0-9]{39,59}$/u.test(address)
   );
 }
 
+/**
+ * Checks if an address is a Tron address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Tron address.
+ */
 function isTronAddress(address: string): boolean {
-  return /^T[a-zA-Z0-9]{33}$/.test(address);
+  return /^T[a-zA-Z0-9]{33}$/u.test(address);
 }
 
+/**
+ * Checks if an address is an XRP address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is an XRP address.
+ */
 function isXRPAddress(address: string): boolean {
-  return /^r[a-km-zA-HJ-NP-Z1-9]{24,34}$/.test(address);
+  return /^r[a-km-zA-HJ-NP-Z1-9]{24,34}$/u.test(address);
 }
 
+/**
+ * Checks if an address is a Litecoin address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Litecoin address.
+ */
 function isLitecoinAddress(address: string): boolean {
   return (
-    /^L[a-km-zA-HJ-NP-Z1-9]{26,33}$/.test(address) ||
-    /^M[a-km-zA-HJ-NP-Z1-9]{26,33}$/.test(address) ||
-    /^ltc1[a-z0-9]{39,59}$/.test(address)
+    /^L[a-km-zA-HJ-NP-Z1-9]{26,33}$/u.test(address) ||
+    /^M[a-km-zA-HJ-NP-Z1-9]{26,33}$/u.test(address) ||
+    /^ltc1[a-z0-9]{39,59}$/u.test(address)
   );
 }
 
+/**
+ * Checks if an address is a Cardano address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Cardano address.
+ */
 function isCardanoAddress(address: string): boolean {
   return (
-    /^addr1[a-z0-9]{50,100}$/.test(address) ||
-    /^Ae2[a-km-zA-HJ-NP-Z1-9]{55,60}$/.test(address)
+    /^addr1[a-z0-9]{50,100}$/u.test(address) ||
+    /^Ae2[a-km-zA-HJ-NP-Z1-9]{55,60}$/u.test(address)
   );
 }
 
+/**
+ * Checks if an address is a Cosmos address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Cosmos address.
+ */
 function isCosmosAddress(address: string): boolean {
-  return /^cosmos1[a-z0-9]{38}$/.test(address);
+  return /^cosmos1[a-z0-9]{38}$/u.test(address);
 }
 
+/**
+ * Checks if an address is a Polkadot address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Polkadot address.
+ */
 function isPolkadotAddress(address: string): boolean {
-  // Polkadot SS58: starts with 1, exactly 48 chars, base58
-  return /^1[a-km-zA-HJ-NP-Z1-9]{47}$/.test(address);
+  return /^1[a-km-zA-HJ-NP-Z1-9]{47}$/u.test(address);
 }
 
+/**
+ * Checks if an address is a Stellar address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Stellar address.
+ */
 function isStellarAddress(address: string): boolean {
-  // Stellar: starts with G, exactly 56 chars, base32 uppercase
-  return /^G[A-Z0-9]{55}$/.test(address);
+  return /^G[A-Z0-9]{55}$/u.test(address);
 }
 
+/**
+ * Checks if an address is a Solana address.
+ *
+ * @param address - The address to check.
+ * @returns True if the address is a Solana address.
+ */
 function isSolanaAddress(address: string): boolean {
-  // Solana: base58, 32-44 chars — checked LAST because it's the broadest
-  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/u.test(address);
 }
 
 // ============================================================
@@ -78,6 +132,12 @@ type ChainMatch = {
   warning: string;
 };
 
+/**
+ * Detects the blockchain network of an address.
+ *
+ * @param address - The address to detect.
+ * @returns A ChainMatch object or null if undetected.
+ */
 function detectAddressType(address: string): ChainMatch | null {
   if (isEVMAddress(address)) {
     return {
@@ -92,7 +152,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Bitcoin',
       isEVM: false,
       bridges: ['Thorchain (thorchain.org)', 'RenBridge (renproject.io)'],
-      warning: 'This looks like a Bitcoin address. Bitcoin is not compatible with EVM chains.',
+      warning:
+        'This looks like a Bitcoin address. Bitcoin is not compatible with EVM chains.',
     };
   }
   if (isTronAddress(address)) {
@@ -100,7 +161,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Tron',
       isEVM: false,
       bridges: ['Sun.io (sun.io)', 'Swft Bridge (swft.pro)'],
-      warning: 'This looks like a Tron address. Tron is not compatible with EVM chains.',
+      warning:
+        'This looks like a Tron address. Tron is not compatible with EVM chains.',
     };
   }
   if (isXRPAddress(address)) {
@@ -108,7 +170,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'XRP (Ripple)',
       isEVM: false,
       bridges: ['Thorchain (thorchain.org)', 'Bitrue (bitrue.com)'],
-      warning: 'This looks like an XRP Ledger address. XRP is not compatible with EVM chains.',
+      warning:
+        'This looks like an XRP Ledger address. XRP is not compatible with EVM chains.',
     };
   }
   if (isLitecoinAddress(address)) {
@@ -116,7 +179,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Litecoin',
       isEVM: false,
       bridges: ['Thorchain (thorchain.org)'],
-      warning: 'This looks like a Litecoin address. Litecoin is not compatible with EVM chains.',
+      warning:
+        'This looks like a Litecoin address. Litecoin is not compatible with EVM chains.',
     };
   }
   if (isCardanoAddress(address)) {
@@ -124,15 +188,20 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Cardano',
       isEVM: false,
       bridges: ['Milkomeda (milkomeda.com)', 'Axelar (axelar.network)'],
-      warning: 'This looks like a Cardano address. Cardano is not compatible with EVM chains.',
+      warning:
+        'This looks like a Cardano address. Cardano is not compatible with EVM chains.',
     };
   }
   if (isCosmosAddress(address)) {
     return {
       name: 'Cosmos',
       isEVM: false,
-      bridges: ['Gravity Bridge (gravitybridge.net)', 'Axelar (axelar.network)'],
-      warning: 'This looks like a Cosmos address. Cosmos is not compatible with EVM chains.',
+      bridges: [
+        'Gravity Bridge (gravitybridge.net)',
+        'Axelar (axelar.network)',
+      ],
+      warning:
+        'This looks like a Cosmos address. Cosmos is not compatible with EVM chains.',
     };
   }
   if (isPolkadotAddress(address)) {
@@ -140,7 +209,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Polkadot',
       isEVM: false,
       bridges: ['Snowbridge (snowbridge.network)', 'Wormhole (wormhole.com)'],
-      warning: 'This looks like a Polkadot address. Polkadot is not compatible with EVM chains.',
+      warning:
+        'This looks like a Polkadot address. Polkadot is not compatible with EVM chains.',
     };
   }
   if (isStellarAddress(address)) {
@@ -148,7 +218,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Stellar',
       isEVM: false,
       bridges: ['Allbridge (allbridge.io)', 'StellarTerm (stellarterm.com)'],
-      warning: 'This looks like a Stellar address. Stellar is not compatible with EVM chains.',
+      warning:
+        'This looks like a Stellar address. Stellar is not compatible with EVM chains.',
     };
   }
   if (isSolanaAddress(address)) {
@@ -156,7 +227,8 @@ function detectAddressType(address: string): ChainMatch | null {
       name: 'Solana',
       isEVM: false,
       bridges: ['Wormhole (wormhole.com)', 'Allbridge (allbridge.io)'],
-      warning: 'This looks like a Solana address. Solana uses a completely different network than EVM chains.',
+      warning:
+        'This looks like a Solana address. Solana uses a completely different network than EVM chains.',
     };
   }
   return null;
@@ -166,14 +238,26 @@ function detectAddressType(address: string): ChainMatch | null {
 // CHAIN ID MAPPING
 // ============================================================
 
-function normalizeChainId(id: string): string {
-  if (id.startsWith('eip155:')) {
-    const num = parseInt(id.replace('eip155:', ''), 10);
-    return '0x' + num.toString(16);
+/**
+ * Normalizes a chain ID to hex format.
+ *
+ * @param chainId - The chain ID to normalize.
+ * @returns The normalized chain ID.
+ */
+function normalizeChainId(chainId: string): string {
+  if (chainId.startsWith('eip155:')) {
+    const chainNumber = parseInt(chainId.replace('eip155:', ''), 10);
+    return `0x${chainNumber.toString(16)}`;
   }
-  return id;
+  return chainId;
 }
 
+/**
+ * Gets the human-readable name of a chain.
+ *
+ * @param chainId - The chain ID.
+ * @returns The chain name.
+ */
 function getChainName(chainId: string): string {
   const chains: Record<string, string> = {
     '0x1': 'Ethereum Mainnet',
@@ -196,13 +280,22 @@ function getChainName(chainId: string): string {
 // SHARED UI BUILDER
 // ============================================================
 
+/**
+ * Builds the warning panel content.
+ *
+ * @param currentChainName - The name of the current chain.
+ * @param detected - The detected chain match.
+ * @param toAddress - The destination address.
+ * @param isPreview - Whether this is a preview.
+ * @returns The panel content.
+ */
 function buildWarningContent(
   currentChainName: string,
   detected: ChainMatch,
   toAddress: string,
   isPreview = false,
 ) {
-  const bridgeList = detected.bridges.map((b) => `→ ${b}`).join('\n');
+  const bridgeList = detected.bridges.map((bridge) => `→ ${bridge}`).join('\n');
   return panel([
     heading(`🚨 Wrong Chain Detected!${isPreview ? ' (Preview)' : ''}`),
     divider(),
@@ -240,7 +333,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
         method: 'snap_dialog',
         params: {
           type: 'alert',
-          content: buildWarningContent(currentChainName, detected, address, true),
+          content: buildWarningContent(
+            currentChainName,
+            detected,
+            address,
+            true,
+          ),
         },
       });
     }
@@ -294,11 +392,12 @@ export const onTransaction: OnTransactionHandler = async ({
       divider(),
       text(`**Network:** ${currentChainName}`),
       text('This address format is not recognized.'),
-      text('Proceed only if you are certain this address is correct for this network.'),
+      text(
+        'Proceed only if you are certain this address is correct for this network.',
+      ),
       divider(),
       text('**Destination address:**'),
       copyable(toAddress),
     ]),
   };
 };
-

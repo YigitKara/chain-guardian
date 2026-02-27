@@ -131,7 +131,7 @@ const Index = () => {
     ? isFlask
     : snapsDetected;
 
-  const handleTestTransactionClick = async () => {
+  const handleTestTransactionClick = () => {
     const accounts = (await window.ethereum.request({
       method: 'eth_requestAccounts',
     })) as string[];
@@ -147,7 +147,7 @@ const Index = () => {
     });
   };
 
-  const previewWarning = async (address: string) => {
+  const previewWarning = (address: string) => {
     await invokeSnap({
       method: 'previewWarning',
       params: { address, chainId: 'eip155:1' },
@@ -234,7 +234,9 @@ const Index = () => {
             description: 'Preview warning for a Solana address.',
             button: (
               <button
-                onClick={() => previewWarning('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU')}
+                onClick={() =>
+                  previewWarning('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU')
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -250,7 +252,9 @@ const Index = () => {
             description: 'Preview warning for a Bitcoin address.',
             button: (
               <button
-                onClick={() => previewWarning('1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf')}
+                onClick={() =>
+                  previewWarning('1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf')
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -266,7 +270,9 @@ const Index = () => {
             description: 'Preview warning for a Tron address.',
             button: (
               <button
-                onClick={() => previewWarning('TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9')}
+                onClick={() =>
+                  previewWarning('TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9')
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -282,7 +288,9 @@ const Index = () => {
             description: 'Preview warning for an XRP address.',
             button: (
               <button
-                onClick={() => previewWarning('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh')}
+                onClick={() =>
+                  previewWarning('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh')
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -298,7 +306,9 @@ const Index = () => {
             description: 'Preview warning for a Litecoin address.',
             button: (
               <button
-                onClick={() => previewWarning('LaMT348PWRnrqeeWArpwQPbuanpXDZGEUz')}
+                onClick={() =>
+                  previewWarning('LaMT348PWRnrqeeWArpwQPbuanpXDZGEUz')
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -314,7 +324,11 @@ const Index = () => {
             description: 'Preview warning for a Cosmos address.',
             button: (
               <button
-                onClick={() => previewWarning('cosmos1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpab8xk9')}
+                onClick={() =>
+                  previewWarning(
+                    'cosmos1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpab8xk9',
+                  )
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -330,7 +344,11 @@ const Index = () => {
             description: 'Preview warning for a Stellar address.',
             button: (
               <button
-                onClick={() => previewWarning('GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWNA')}
+                onClick={() =>
+                  previewWarning(
+                    'GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWNA',
+                  )
+                }
                 disabled={!installedSnap}
                 style={redButtonStyle}
               >
@@ -342,9 +360,9 @@ const Index = () => {
         />
         <Notice>
           <p>
-            Chain Guardian protects your transactions by detecting address format
-            mismatches across EVM, Solana, Bitcoin, Tron, XRP, Litecoin, Cardano,
-            Cosmos, Polkadot, and Stellar networks.
+            Chain Guardian protects your transactions by detecting address
+            format mismatches across EVM, Solana, Bitcoin, Tron, XRP, Litecoin,
+            Cardano, Cosmos, Polkadot, and Stellar networks.
           </p>
         </Notice>
       </CardContainer>

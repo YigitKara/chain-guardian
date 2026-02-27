@@ -1,6 +1,6 @@
 {
   "name": "@yigitkara/chain-guardian",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Chain Guardian — a MetaMask Snap that protects your transactions from cross-chain address mistakes.",
   "repository": {
     "type": "git",
