@@ -1,374 +1,522 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/promise-function-async */
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
-import {
-  ConnectButton,
-  InstallFlaskButton,
-  ReconnectButton,
-  Card,
-} from '../components';
-import { defaultSnapOrigin } from '../config';
-import {
-  useMetaMask,
-  useInvokeSnap,
-  useMetaMaskContext,
-  useRequestSnap,
-} from '../hooks';
-import { isLocalSnap, shouldDisplayReconnectButton } from '../utils';
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=DM+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: #ffffff; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+`;
 
-const Container = styled.div`
+const Wrap = styled.div`
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+`;
+
+const Nav = styled.nav`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  flex: 1;
-  margin-top: 7.6rem;
-  margin-bottom: 7.6rem;
-  ${({ theme }) => theme.mediaQueries.small} {
-    padding-left: 2.4rem;
-    padding-right: 2.4rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    width: auto;
-  }
-`;
-
-const Heading = styled.h1`
-  margin-top: 0;
-  margin-bottom: 2.4rem;
-  text-align: center;
-`;
-
-const Span = styled.span`
-  color: ${(props) => props.theme.colors.primary?.default};
-`;
-
-const Subtitle = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.large};
-  font-weight: 500;
-  margin-top: 0;
-  margin-bottom: 0;
-  ${({ theme }) => theme.mediaQueries.small} {
-    font-size: ${({ theme }) => theme.fontSizes.text};
-  }
-`;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: space-between;
-  max-width: 64.8rem;
-  width: 100%;
-  height: 100%;
-  margin-top: 1.5rem;
+  padding: 1.5rem 0 3rem;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 4rem;
 `;
 
-const Notice = styled.div`
-  background-color: ${({ theme }) => theme.colors.background?.alternative};
-  border: 1px solid ${({ theme }) => theme.colors.border?.default};
-  color: ${({ theme }) => theme.colors.text?.alternative};
-  border-radius: ${({ theme }) => theme.radii.default};
-  padding: 2.4rem;
-  margin-top: 2.4rem;
-  max-width: 60rem;
-  width: 100%;
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+`;
 
-  & > * {
-    margin: 0;
-  }
-  ${({ theme }) => theme.mediaQueries.small} {
-    margin-top: 1.2rem;
-    padding: 1.6rem;
+const LogoIcon = styled.div`
+  width: 28px;
+  height: 28px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NavBtn = styled.a`
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+`;
+
+const Hero = styled.div`
+  text-align: center;
+  margin-bottom: 5rem;
+`;
+
+const Badge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f7f7f7;
+  border: 1px solid #ebebeb;
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 2rem;
+  font-family: 'DM Mono', monospace;
+`;
+
+const BadgeDot = styled.div`
+  width: 6px;
+  height: 6px;
+  background: #1d9e75;
+  border-radius: 50%;
+`;
+
+const H1 = styled.h1`
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.5rem;
+  color: #1a1a1a;
+  strong { font-weight: 500; }
+`;
+
+const Sub = styled.p`
+  font-size: 1.05rem;
+  color: #666;
+  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  font-weight: 300;
+`;
+
+const BtnRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+const SecondaryBtn = styled.a`
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+`;
+
+const Demo = styled.div`
+  background: #f7f7f7;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 5rem;
+`;
+
+const DemoLabel = styled.div`
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+`;
+
+const WarningCard = styled.div`
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 420px;
+  margin: 0 auto;
+`;
+
+const WarningHeader = styled.div`
+  background: #fff5f5;
+  border-bottom: 1px solid #ffd7d7;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const WarningIconCircle = styled.div`
+  width: 20px;
+  height: 20px;
+  background: #e24b4a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const WarningTitle = styled.div`
+  font-size: 13px;
+  font-weight: 500;
+  color: #a32d2d;
+`;
+
+const WarningBody = styled.div`
+  padding: 16px 18px;
+`;
+
+const WarningMsg = styled.p`
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 14px;
+`;
+
+const WarningAddress = styled.div`
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  background: #f7f7f7;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #666;
+  word-break: break-all;
+  margin-bottom: 14px;
+`;
+
+const BridgeLabel = styled.div`
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  font-family: 'DM Mono', monospace;
+`;
+
+const BridgeRow = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+const BridgeChip = styled.div`
+  background: #f7f7f7;
+  border: 1px solid #ebebeb;
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #666;
+`;
+
+const GreenCard = styled.div`
+  background: #f0faf4;
+  border: 1px solid #c3e6d0;
+  border-radius: 12px;
+  padding: 16px 18px;
+  max-width: 420px;
+  margin: 12px auto 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const GreenDot = styled.div`
+  width: 8px;
+  height: 8px;
+  background: #1d9e75;
+  border-radius: 50%;
+  flex-shrink: 0;
+`;
+
+const GreenText = styled.p`
+  font-size: 13px;
+  color: #1a6640;
+  line-height: 1.5;
+`;
+
+const SectionLabel = styled.div`
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+`;
+
+const SectionSub = styled.p`
+  font-size: 14px;
+  color: #666;
+  font-weight: 300;
+  margin-bottom: 2rem;
+`;
+
+const Steps = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: #ebebeb;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 5rem;
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+`;
+
+const Step = styled.div`
+  background: #ffffff;
+  padding: 1.75rem;
+`;
+
+const StepNum = styled.div`
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #999;
+  margin-bottom: 1rem;
+`;
+
+const StepTitle = styled.h3`
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+`;
+
+const StepDesc = styled.p`
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  font-weight: 300;
+`;
+
+const ChainSection = styled.div`
+  margin-bottom: 5rem;
+`;
+
+const ChainGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+const Chain = styled.div<{ featured?: boolean }>`
+  background: ${({ featured }) => (featured ? '#f7f7f7' : '#f7f7f7')};
+  border: 1px solid ${({ featured }) => (featured ? '#d0d0d0' : '#ebebeb')};
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: ${({ featured }) => (featured ? '#1a1a1a' : '#666')};
+  font-weight: ${({ featured }) => (featured ? '400' : '300')};
+`;
+
+const Footer = styled.footer`
+  border-top: 1px solid #f0f0f0;
+  padding-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
+
+const FooterLeft = styled.div`
+  font-size: 12px;
+  color: #999;
+`;
+
+const FooterLinks = styled.div`
+  display: flex;
+  gap: 20px;
+  a {
+    font-size: 12px;
+    color: #999;
+    text-decoration: none;
+    &:hover { color: #1a1a1a; }
   }
 `;
 
-const ErrorMessage = styled.div`
-  background-color: ${({ theme }) => theme.colors.error?.muted};
-  border: 1px solid ${({ theme }) => theme.colors.error?.default};
-  color: ${({ theme }) => theme.colors.error?.alternative};
-  border-radius: ${({ theme }) => theme.radii.default};
-  padding: 2.4rem;
-  margin-bottom: 2.4rem;
-  margin-top: 2.4rem;
-  max-width: 60rem;
-  width: 100%;
-  ${({ theme }) => theme.mediaQueries.small} {
-    padding: 1.6rem;
-    margin-bottom: 1.2rem;
-    margin-top: 1.2rem;
-    max-width: 100%;
-  }
+const Divider = styled.div`
+  margin-bottom: 5rem;
 `;
-
-const redButtonStyle = {
-  backgroundColor: '#e41d1d',
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  padding: '12px 24px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  fontWeight: 'bold',
-};
-
-const greenButtonStyle = {
-  backgroundColor: '#28a745',
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  padding: '12px 24px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  fontWeight: 'bold',
-};
 
 const Index = () => {
-  const { error } = useMetaMaskContext();
-  const { isFlask, snapsDetected, installedSnap } = useMetaMask();
-  const requestSnap = useRequestSnap();
-  const invokeSnap = useInvokeSnap();
-
-  const isMetaMaskReady = isLocalSnap(defaultSnapOrigin)
-    ? isFlask
-    : snapsDetected;
-
-  const handleTestTransactionClick = async () => {
-    const accounts = (await window.ethereum.request({
-      method: 'eth_requestAccounts',
-    })) as string[];
-    await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: accounts[0],
-          to: '0x742d35Cc6634C0532925a3b8D4C9C0B4b8E6d8A2',
-          value: '0x0',
-        },
-      ],
-    });
-  };
-
-  const previewWarning = async (address: string) => {
-    await invokeSnap({
-      method: 'previewWarning',
-      params: { address, chainId: 'eip155:1' },
-    });
-  };
-
   return (
-    <Container>
-      <Heading>
-        Welcome to <Span>Chain Guardian</Span>
-      </Heading>
-      <Subtitle>
-        Protecting your transactions from cross-chain mistakes
-      </Subtitle>
-      <CardContainer>
-        {error && (
-          <ErrorMessage>
-            <b>An error happened:</b> {error.message}
-          </ErrorMessage>
-        )}
-        {!isMetaMaskReady && (
-          <Card
-            content={{
-              title: 'Install',
-              description:
-                'Snaps is pre-release software only available in MetaMask Flask, a canary distribution for developers with access to upcoming features.',
-              button: <InstallFlaskButton />,
-            }}
-            fullWidth
-          />
-        )}
-        {!installedSnap && (
-          <Card
-            content={{
-              title: 'Connect',
-              description:
-                'Get started by connecting to and installing the Chain Guardian snap.',
-              button: (
-                <ConnectButton
-                  onClick={requestSnap}
-                  disabled={!isMetaMaskReady}
-                />
-              ),
-            }}
-            disabled={!isMetaMaskReady}
-          />
-        )}
-        {shouldDisplayReconnectButton(installedSnap) && (
-          <Card
-            content={{
-              title: 'Reconnect',
-              description:
-                'While connected to a local running snap this button will always be displayed in order to update the snap if a change is made.',
-              button: (
-                <ReconnectButton
-                  onClick={requestSnap}
-                  disabled={!installedSnap}
-                />
-              ),
-            }}
-            disabled={!installedSnap}
-          />
-        )}
-        <Card
-          content={{
-            title: '✅ Test Valid Transaction',
-            description:
-              'Send a test transaction to a valid EVM address and see the green insight panel.',
-            button: (
-              <button
-                onClick={handleTestTransactionClick}
-                disabled={!installedSnap}
-                style={greenButtonStyle}
-              >
-                Test Valid Address
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview Solana Warning',
-            description: 'Preview warning for a Solana address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU')
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview Solana
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview Bitcoin Warning',
-            description: 'Preview warning for a Bitcoin address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning('1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf')
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview Bitcoin
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview Tron Warning',
-            description: 'Preview warning for a Tron address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning('TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9')
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview Tron
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview XRP Warning',
-            description: 'Preview warning for an XRP address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh')
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview XRP
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview Litecoin Warning',
-            description: 'Preview warning for a Litecoin address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning('LaMT348PWRnrqeeWArpwQPbuanpXDZGEUz')
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview Litecoin
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview Cosmos Warning',
-            description: 'Preview warning for a Cosmos address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning(
-                    'cosmos1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpab8xk9',
-                  )
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview Cosmos
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Card
-          content={{
-            title: '🚨 Preview Stellar Warning',
-            description: 'Preview warning for a Stellar address.',
-            button: (
-              <button
-                onClick={() =>
-                  previewWarning(
-                    'GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWNA',
-                  )
-                }
-                disabled={!installedSnap}
-                style={redButtonStyle}
-              >
-                Preview Stellar
-              </button>
-            ),
-          }}
-          disabled={!installedSnap}
-        />
-        <Notice>
-          <p>
-            Chain Guardian protects your transactions by detecting address
-            format mismatches across EVM, Solana, Bitcoin, Tron, XRP, Litecoin,
-            Cardano, Cosmos, Polkadot, and Stellar networks.
-          </p>
-        </Notice>
-      </CardContainer>
-    </Container>
+    <>
+      <GlobalStyle />
+      <Wrap>
+        <Nav>
+          <Logo>
+            <LogoIcon>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                <path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1zm-1 9.4L4.6 8l1.1-1.1 1.3 1.3 3.3-3.3 1.1 1.1L7 10.4z" />
+              </svg>
+            </LogoIcon>
+            Chain Guardian
+          </Logo>
+          <NavBtn href="https://github.com/YigitKara/chain-guardian" target="_blank">
+            View on GitHub →
+          </NavBtn>
+        </Nav>
+
+        <Hero>
+          <Badge>
+            <BadgeDot />
+            Approved MetaMask Snap
+          </Badge>
+          <H1>
+            Never send crypto to
+            <br />
+            <strong>the wrong blockchain</strong>
+          </H1>
+          <Sub>
+            Chain Guardian watches every transaction you make in MetaMask and
+            warns you instantly if the destination address belongs to a
+            different blockchain network.
+          </Sub>
+          <BtnRow>
+            <SecondaryBtn
+              href="https://github.com/YigitKara/chain-guardian"
+              target="_blank"
+            >
+              View source code
+            </SecondaryBtn>
+          </BtnRow>
+        </Hero>
+
+        <Demo>
+          <DemoLabel>Live preview — what you see in MetaMask</DemoLabel>
+          <WarningCard>
+            <WarningHeader>
+              <WarningIconCircle>
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
+                  <path d="M5 1L1 8h8L5 1zm0 5.5a.5.5 0 110 1 .5.5 0 010-1zm-.5-3h1v2.5h-1V3.5z" />
+                </svg>
+              </WarningIconCircle>
+              <WarningTitle>Wrong network detected</WarningTitle>
+            </WarningHeader>
+            <WarningBody>
+              <WarningMsg>
+                This address appears to be a <strong>Solana</strong> address.
+                You are currently on <strong>Ethereum Mainnet</strong>. Sending
+                funds here will result in permanent loss.
+              </WarningMsg>
+              <WarningAddress>
+                7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
+              </WarningAddress>
+              <BridgeLabel>Send via bridge instead</BridgeLabel>
+              <BridgeRow>
+                <BridgeChip>Wormhole</BridgeChip>
+                <BridgeChip>Allbridge</BridgeChip>
+                <BridgeChip>deBridge</BridgeChip>
+              </BridgeRow>
+            </WarningBody>
+          </WarningCard>
+          <GreenCard>
+            <GreenDot />
+            <GreenText>
+              When the address is compatible, you will see a green confirmation
+              — safe to proceed.
+            </GreenText>
+          </GreenCard>
+        </Demo>
+
+        <Divider>
+          <SectionLabel>How it works</SectionLabel>
+          <SectionTitle>Three steps, zero configuration</SectionTitle>
+          <SectionSub>Install once, protected forever. No setup required.</SectionSub>
+          <Steps>
+            <Step>
+              <StepNum>01</StepNum>
+              <StepTitle>Install the Snap</StepTitle>
+              <StepDesc>
+                Add Chain Guardian to MetaMask in one click from the official
+                Snaps directory. No accounts, no emails.
+              </StepDesc>
+            </Step>
+            <Step>
+              <StepNum>02</StepNum>
+              <StepTitle>Send a transaction</StepTitle>
+              <StepDesc>
+                Every time you initiate a send in MetaMask, Chain Guardian
+                silently analyzes the destination address.
+              </StepDesc>
+            </Step>
+            <Step>
+              <StepNum>03</StepNum>
+              <StepTitle>Get warned instantly</StepTitle>
+              <StepDesc>
+                If the address format does not match your current network, you
+                see a clear warning before you confirm.
+              </StepDesc>
+            </Step>
+          </Steps>
+        </Divider>
+
+        <ChainSection>
+          <SectionLabel>Supported networks</SectionLabel>
+          <SectionTitle>10+ blockchains protected</SectionTitle>
+          <SectionSub>
+            Chain Guardian detects address mismatches across all major
+            blockchain ecosystems.
+          </SectionSub>
+          <ChainGrid>
+            <Chain featured>Ethereum</Chain>
+            <Chain featured>Polygon</Chain>
+            <Chain featured>BNB Chain</Chain>
+            <Chain featured>Avalanche</Chain>
+            <Chain featured>Optimism</Chain>
+            <Chain featured>Arbitrum</Chain>
+            <Chain featured>Base</Chain>
+            <Chain>Solana</Chain>
+            <Chain>Bitcoin</Chain>
+            <Chain>Tron</Chain>
+            <Chain>XRP</Chain>
+            <Chain>Litecoin</Chain>
+            <Chain>Cardano</Chain>
+            <Chain>Cosmos</Chain>
+            <Chain>Polkadot</Chain>
+            <Chain>Stellar</Chain>
+          </ChainGrid>
+        </ChainSection>
+
+        <Footer>
+          <FooterLeft>© 2026 Chain Guardian · Free and open source</FooterLeft>
+          <FooterLinks>
+            
+              href="https://github.com/YigitKara/chain-guardian"
+              target="_blank"
+            >
+              GitHub
+            </a>
+            
+              href="https://www.npmjs.com/package/@yigitkara/chain-guardian"
+              target="_blank"
+            >
+              npm
+            </a>
+          </FooterLinks>
+        </Footer>
+      </Wrap>
+    </>
   );
 };
 
