@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/promise-function-async */
-import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
@@ -358,171 +355,163 @@ const Divider = styled.div`
   margin-bottom: 5rem;
 `;
 
-const Index = () => {
-  return (
-    <>
-      <GlobalStyle />
-      <Wrap>
-        <Nav>
-          <Logo>
-            <LogoIcon>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-                <path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1zm-1 9.4L4.6 8l1.1-1.1 1.3 1.3 3.3-3.3 1.1 1.1L7 10.4z" />
-              </svg>
-            </LogoIcon>
-            Chain Guardian
-          </Logo>
-          <NavBtn
+const Index = () => (
+  <>
+    <GlobalStyle />
+    <Wrap>
+      <Nav>
+        <Logo>
+          <LogoIcon>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+              <path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1zm-1 9.4L4.6 8l1.1-1.1 1.3 1.3 3.3-3.3 1.1 1.1L7 10.4z" />
+            </svg>
+          </LogoIcon>
+          Chain Guardian
+        </Logo>
+        <NavBtn
+          href="https://github.com/YigitKara/chain-guardian"
+          target="_blank"
+        >
+          View on GitHub
+        </NavBtn>
+      </Nav>
+
+      <Hero>
+        <Badge>
+          <BadgeDot />
+          Approved MetaMask Snap
+        </Badge>
+        <H1>Never send crypto to the wrong blockchain</H1>
+        <Sub>
+          Chain Guardian watches every transaction you make in MetaMask and
+          warns you instantly if the destination address belongs to a different
+          blockchain network.
+        </Sub>
+        <BtnRow>
+          <SecondaryBtn
             href="https://github.com/YigitKara/chain-guardian"
             target="_blank"
           >
-            View on GitHub
-          </NavBtn>
-        </Nav>
+            View source code
+          </SecondaryBtn>
+        </BtnRow>
+      </Hero>
 
-        <Hero>
-          <Badge>
-            <BadgeDot />
-            Approved MetaMask Snap
-          </Badge>
-          <H1>
-            Never send crypto to the wrong blockchain
-          </H1>
-          <Sub>
-            Chain Guardian watches every transaction you make in MetaMask and
-            warns you instantly if the destination address belongs to a
-            different blockchain network.
-          </Sub>
-          <BtnRow>
-            <SecondaryBtn
-              href="https://github.com/YigitKara/chain-guardian"
-              target="_blank"
-            >
-              View source code
-            </SecondaryBtn>
-          </BtnRow>
-        </Hero>
+      <Demo>
+        <DemoLabel>Live preview — what you see in MetaMask</DemoLabel>
+        <WarningCard>
+          <WarningHeader>
+            <WarningIconCircle>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
+                <path d="M5 1L1 8h8L5 1zm0 5.5a.5.5 0 110 1 .5.5 0 010-1zm-.5-3h1v2.5h-1V3.5z" />
+              </svg>
+            </WarningIconCircle>
+            <WarningTitle>Wrong network detected</WarningTitle>
+          </WarningHeader>
+          <WarningBody>
+            <WarningMsg>
+              This address appears to be a Solana address. You are currently on
+              Ethereum Mainnet. Sending funds here will result in permanent
+              loss.
+            </WarningMsg>
+            <WarningAddress>
+              7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
+            </WarningAddress>
+            <BridgeLabel>Send via bridge instead</BridgeLabel>
+            <BridgeRow>
+              <BridgeChip>Wormhole</BridgeChip>
+              <BridgeChip>Allbridge</BridgeChip>
+              <BridgeChip>deBridge</BridgeChip>
+            </BridgeRow>
+          </WarningBody>
+        </WarningCard>
+        <GreenCard>
+          <GreenDot />
+          <GreenText>
+            When the address is compatible, you will see a green confirmation —
+            safe to proceed.
+          </GreenText>
+        </GreenCard>
+      </Demo>
 
-        <Demo>
-          <DemoLabel>Live preview — what you see in MetaMask</DemoLabel>
-          <WarningCard>
-            <WarningHeader>
-              <WarningIconCircle>
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
-                  <path d="M5 1L1 8h8L5 1zm0 5.5a.5.5 0 110 1 .5.5 0 010-1zm-.5-3h1v2.5h-1V3.5z" />
-                </svg>
-              </WarningIconCircle>
-              <WarningTitle>Wrong network detected</WarningTitle>
-            </WarningHeader>
-            <WarningBody>
-              <WarningMsg>
-                This address appears to be a Solana address. You are currently
-                on Ethereum Mainnet. Sending funds here will result in
-                permanent loss.
-              </WarningMsg>
-              <WarningAddress>
-                7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
-              </WarningAddress>
-              <BridgeLabel>Send via bridge instead</BridgeLabel>
-              <BridgeRow>
-                <BridgeChip>Wormhole</BridgeChip>
-                <BridgeChip>Allbridge</BridgeChip>
-                <BridgeChip>deBridge</BridgeChip>
-              </BridgeRow>
-            </WarningBody>
-          </WarningCard>
-          <GreenCard>
-            <GreenDot />
-            <GreenText>
-              When the address is compatible, you will see a green confirmation
-              — safe to proceed.
-            </GreenText>
-          </GreenCard>
-        </Demo>
+      <Divider>
+        <SectionLabel>How it works</SectionLabel>
+        <SectionTitle>Three steps, zero configuration</SectionTitle>
+        <SectionSub>Install once, protected forever. No setup required.</SectionSub>
+        <Steps>
+          <Step>
+            <StepNum>01</StepNum>
+            <StepTitle>Install the Snap</StepTitle>
+            <StepDesc>
+              Add Chain Guardian to MetaMask in one click from the official
+              Snaps directory. No accounts, no emails.
+            </StepDesc>
+          </Step>
+          <Step>
+            <StepNum>02</StepNum>
+            <StepTitle>Send a transaction</StepTitle>
+            <StepDesc>
+              Every time you initiate a send in MetaMask, Chain Guardian
+              silently analyzes the destination address.
+            </StepDesc>
+          </Step>
+          <Step>
+            <StepNum>03</StepNum>
+            <StepTitle>Get warned instantly</StepTitle>
+            <StepDesc>
+              If the address format does not match your current network, you
+              see a clear warning before you confirm.
+            </StepDesc>
+          </Step>
+        </Steps>
+      </Divider>
 
-        <Divider>
-          <SectionLabel>How it works</SectionLabel>
-          <SectionTitle>Three steps, zero configuration</SectionTitle>
-          <SectionSub>
-            Install once, protected forever. No setup required.
-          </SectionSub>
-          <Steps>
-            <Step>
-              <StepNum>01</StepNum>
-              <StepTitle>Install the Snap</StepTitle>
-              <StepDesc>
-                Add Chain Guardian to MetaMask in one click from the official
-                Snaps directory. No accounts, no emails.
-              </StepDesc>
-            </Step>
-            <Step>
-              <StepNum>02</StepNum>
-              <StepTitle>Send a transaction</StepTitle>
-              <StepDesc>
-                Every time you initiate a send in MetaMask, Chain Guardian
-                silently analyzes the destination address.
-              </StepDesc>
-            </Step>
-            <Step>
-              <StepNum>03</StepNum>
-              <StepTitle>Get warned instantly</StepTitle>
-              <StepDesc>
-                If the address format does not match your current network, you
-                see a clear warning before you confirm.
-              </StepDesc>
-            </Step>
-          </Steps>
-        </Divider>
+      <ChainSection>
+        <SectionLabel>Supported networks</SectionLabel>
+        <SectionTitle>10+ blockchains protected</SectionTitle>
+        <SectionSub>
+          Chain Guardian detects address mismatches across all major blockchain
+          ecosystems.
+        </SectionSub>
+        <ChainGrid>
+          <ChainFeatured>Ethereum</ChainFeatured>
+          <ChainFeatured>Polygon</ChainFeatured>
+          <ChainFeatured>BNB Chain</ChainFeatured>
+          <ChainFeatured>Avalanche</ChainFeatured>
+          <ChainFeatured>Optimism</ChainFeatured>
+          <ChainFeatured>Arbitrum</ChainFeatured>
+          <ChainFeatured>Base</ChainFeatured>
+          <Chain>Solana</Chain>
+          <Chain>Bitcoin</Chain>
+          <Chain>Tron</Chain>
+          <Chain>XRP</Chain>
+          <Chain>Litecoin</Chain>
+          <Chain>Cardano</Chain>
+          <Chain>Cosmos</Chain>
+          <Chain>Polkadot</Chain>
+          <Chain>Stellar</Chain>
+        </ChainGrid>
+      </ChainSection>
 
-        <ChainSection>
-          <SectionLabel>Supported networks</SectionLabel>
-          <SectionTitle>10+ blockchains protected</SectionTitle>
-          <SectionSub>
-            Chain Guardian detects address mismatches across all major
-            blockchain ecosystems.
-          </SectionSub>
-          <ChainGrid>
-            <ChainFeatured>Ethereum</ChainFeatured>
-            <ChainFeatured>Polygon</ChainFeatured>
-            <ChainFeatured>BNB Chain</ChainFeatured>
-            <ChainFeatured>Avalanche</ChainFeatured>
-            <ChainFeatured>Optimism</ChainFeatured>
-            <ChainFeatured>Arbitrum</ChainFeatured>
-            <ChainFeatured>Base</ChainFeatured>
-            <Chain>Solana</Chain>
-            <Chain>Bitcoin</Chain>
-            <Chain>Tron</Chain>
-            <Chain>XRP</Chain>
-            <Chain>Litecoin</Chain>
-            <Chain>Cardano</Chain>
-            <Chain>Cosmos</Chain>
-            <Chain>Polkadot</Chain>
-            <Chain>Stellar</Chain>
-          </ChainGrid>
-        </ChainSection>
-
-        <Footer>
-          <FooterLeft>
-            2026 Chain Guardian - Free and open source
-          </FooterLeft>
-          <FooterLinks>
-            <FooterLink
-              href="https://github.com/YigitKara/chain-guardian"
-              target="_blank"
-            >
-              GitHub
-            </FooterLink>
-            <FooterLink
-              href="https://www.npmjs.com/package/@yigitkara/chain-guardian"
-              target="_blank"
-            >
-              npm
-            </FooterLink>
-          </FooterLinks>
-        </Footer>
-      </Wrap>
-    </>
-  );
-};
+      <Footer>
+        <FooterLeft>2026 Chain Guardian - Free and open source</FooterLeft>
+        <FooterLinks>
+          <FooterLink
+            href="https://github.com/YigitKara/chain-guardian"
+            target="_blank"
+          >
+            GitHub
+          </FooterLink>
+          <FooterLink
+            href="https://www.npmjs.com/package/@yigitkara/chain-guardian"
+            target="_blank"
+          >
+            npm
+          </FooterLink>
+        </FooterLinks>
+      </Footer>
+    </Wrap>
+  </>
+);
 
 export default Index;
