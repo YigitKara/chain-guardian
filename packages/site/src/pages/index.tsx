@@ -51,8 +51,6 @@ const NavBtn = styled.a`
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: -0.01em;
   text-decoration: none;
 `;
 
@@ -72,7 +70,6 @@ const Badge = styled.div`
   font-size: 12px;
   color: #666;
   margin-bottom: 2rem;
-  font-family: 'DM Mono', monospace;
 `;
 
 const BadgeDot = styled.div`
@@ -89,7 +86,6 @@ const H1 = styled.h1`
   letter-spacing: -0.03em;
   margin: 0 0 1.5rem;
   color: #1a1a1a;
-  strong { font-weight: 500; }
 `;
 
 const Sub = styled.p`
@@ -118,7 +114,6 @@ const SecondaryBtn = styled.a`
   font-size: 14px;
   font-weight: 400;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
   text-decoration: none;
 `;
 
@@ -132,7 +127,6 @@ const Demo = styled.div`
 
 const DemoLabel = styled.div`
   font-size: 11px;
-  font-family: 'DM Mono', monospace;
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -186,7 +180,7 @@ const WarningMsg = styled.p`
 `;
 
 const WarningAddress = styled.div`
-  font-family: 'DM Mono', monospace;
+  font-family: monospace;
   font-size: 11px;
   background: #f7f7f7;
   border: 1px solid #ebebeb;
@@ -203,7 +197,6 @@ const BridgeLabel = styled.div`
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 8px;
-  font-family: 'DM Mono', monospace;
 `;
 
 const BridgeRow = styled.div`
@@ -249,7 +242,6 @@ const GreenText = styled.p`
 
 const SectionLabel = styled.div`
   font-size: 11px;
-  font-family: 'DM Mono', monospace;
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -279,7 +271,6 @@ const Steps = styled.div`
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 5rem;
-  @media (max-width: 600px) { grid-template-columns: 1fr; }
 `;
 
 const Step = styled.div`
@@ -289,7 +280,6 @@ const Step = styled.div`
 
 const StepNum = styled.div`
   font-size: 11px;
-  font-family: 'DM Mono', monospace;
   color: #999;
   margin-bottom: 1rem;
 `;
@@ -318,14 +308,24 @@ const ChainGrid = styled.div`
   gap: 8px;
 `;
 
-const Chain = styled.div<{ featured?: boolean }>`
-  background: ${({ featured }) => (featured ? '#f7f7f7' : '#f7f7f7')};
-  border: 1px solid ${({ featured }) => (featured ? '#d0d0d0' : '#ebebeb')};
+const Chain = styled.div`
+  background: #f7f7f7;
+  border: 1px solid #ebebeb;
   border-radius: 100px;
   padding: 6px 16px;
   font-size: 13px;
-  color: ${({ featured }) => (featured ? '#1a1a1a' : '#666')};
-  font-weight: ${({ featured }) => (featured ? '400' : '300')};
+  color: #666;
+  font-weight: 300;
+`;
+
+const ChainFeatured = styled.div`
+  background: #f7f7f7;
+  border: 1px solid #d0d0d0;
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #1a1a1a;
+  font-weight: 400;
 `;
 
 const Footer = styled.footer`
@@ -346,12 +346,12 @@ const FooterLeft = styled.div`
 const FooterLinks = styled.div`
   display: flex;
   gap: 20px;
-  a {
-    font-size: 12px;
-    color: #999;
-    text-decoration: none;
-    &:hover { color: #1a1a1a; }
-  }
+`;
+
+const FooterLink = styled.a`
+  font-size: 12px;
+  color: #999;
+  text-decoration: none;
 `;
 
 const Divider = styled.div`
@@ -372,8 +372,11 @@ const Index = () => {
             </LogoIcon>
             Chain Guardian
           </Logo>
-          <NavBtn href="https://github.com/YigitKara/chain-guardian" target="_blank">
-            View on GitHub →
+          <NavBtn
+            href="https://github.com/YigitKara/chain-guardian"
+            target="_blank"
+          >
+            View on GitHub
           </NavBtn>
         </Nav>
 
@@ -383,9 +386,7 @@ const Index = () => {
             Approved MetaMask Snap
           </Badge>
           <H1>
-            Never send crypto to
-            <br />
-            <strong>the wrong blockchain</strong>
+            Never send crypto to the wrong blockchain
           </H1>
           <Sub>
             Chain Guardian watches every transaction you make in MetaMask and
@@ -415,9 +416,9 @@ const Index = () => {
             </WarningHeader>
             <WarningBody>
               <WarningMsg>
-                This address appears to be a <strong>Solana</strong> address.
-                You are currently on <strong>Ethereum Mainnet</strong>. Sending
-                funds here will result in permanent loss.
+                This address appears to be a Solana address. You are currently
+                on Ethereum Mainnet. Sending funds here will result in
+                permanent loss.
               </WarningMsg>
               <WarningAddress>
                 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
@@ -442,7 +443,9 @@ const Index = () => {
         <Divider>
           <SectionLabel>How it works</SectionLabel>
           <SectionTitle>Three steps, zero configuration</SectionTitle>
-          <SectionSub>Install once, protected forever. No setup required.</SectionSub>
+          <SectionSub>
+            Install once, protected forever. No setup required.
+          </SectionSub>
           <Steps>
             <Step>
               <StepNum>01</StepNum>
@@ -479,13 +482,13 @@ const Index = () => {
             blockchain ecosystems.
           </SectionSub>
           <ChainGrid>
-            <Chain featured>Ethereum</Chain>
-            <Chain featured>Polygon</Chain>
-            <Chain featured>BNB Chain</Chain>
-            <Chain featured>Avalanche</Chain>
-            <Chain featured>Optimism</Chain>
-            <Chain featured>Arbitrum</Chain>
-            <Chain featured>Base</Chain>
+            <ChainFeatured>Ethereum</ChainFeatured>
+            <ChainFeatured>Polygon</ChainFeatured>
+            <ChainFeatured>BNB Chain</ChainFeatured>
+            <ChainFeatured>Avalanche</ChainFeatured>
+            <ChainFeatured>Optimism</ChainFeatured>
+            <ChainFeatured>Arbitrum</ChainFeatured>
+            <ChainFeatured>Base</ChainFeatured>
             <Chain>Solana</Chain>
             <Chain>Bitcoin</Chain>
             <Chain>Tron</Chain>
@@ -499,20 +502,22 @@ const Index = () => {
         </ChainSection>
 
         <Footer>
-          <FooterLeft>© 2026 Chain Guardian · Free and open source</FooterLeft>
+          <FooterLeft>
+            2026 Chain Guardian - Free and open source
+          </FooterLeft>
           <FooterLinks>
-            
+            <FooterLink
               href="https://github.com/YigitKara/chain-guardian"
               target="_blank"
             >
               GitHub
-            </a>
-            
+            </FooterLink>
+            <FooterLink
               href="https://www.npmjs.com/package/@yigitkara/chain-guardian"
               target="_blank"
             >
               npm
-            </a>
+            </FooterLink>
           </FooterLinks>
         </Footer>
       </Wrap>
