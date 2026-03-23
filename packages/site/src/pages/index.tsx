@@ -461,8 +461,8 @@ const Index = () => (
             <StepNum>03</StepNum>
             <StepTitle>Get warned instantly</StepTitle>
             <StepDesc>
-              If the address format does not match your current network, you
-              see a clear warning before you confirm.
+              If the address format does not match your current network, you see
+              a clear warning before you confirm.
             </StepDesc>
           </Step>
         </Steps>
