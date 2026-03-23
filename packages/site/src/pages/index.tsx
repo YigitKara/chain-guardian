@@ -437,7 +437,9 @@ const Index = () => (
       <Divider>
         <SectionLabel>How it works</SectionLabel>
         <SectionTitle>Three steps, zero configuration</SectionTitle>
-        <SectionSub>Install once, protected forever. No setup required.</SectionSub>
+        <SectionSub>
+          Install once, protected forever. No setup required.
+        </SectionSub>
         <Steps>
           <Step>
             <StepNum>01</StepNum>
