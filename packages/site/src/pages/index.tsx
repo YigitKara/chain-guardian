@@ -39,6 +39,12 @@ const LogoIcon = styled.div`
   justify-content: center;
 `;
 
+const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
 const NavBtn = styled.a`
   background: #1a1a1a;
   color: #ffffff;
@@ -51,9 +57,30 @@ const NavBtn = styled.a`
   text-decoration: none;
 `;
 
+const NavBtnOutline = styled.a`
+  background: transparent;
+  color: #1a1a1a;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+`;
+
 const Hero = styled.div`
   text-align: center;
   margin-bottom: 5rem;
+`;
+
+const BadgeRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
 `;
 
 const Badge = styled.div`
@@ -66,13 +93,35 @@ const Badge = styled.div`
   padding: 5px 14px;
   font-size: 12px;
   color: #666;
-  margin-bottom: 2rem;
 `;
 
 const BadgeDot = styled.div`
   width: 6px;
   height: 6px;
   background: #1d9e75;
+  border-radius: 50%;
+`;
+
+const MetaMaskBadge = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff8f2;
+  border: 1px solid #f6851b;
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: #c4610a;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover { background: #fff0e0; }
+`;
+
+const MetaMaskDot = styled.div`
+  width: 6px;
+  height: 6px;
+  background: #f6851b;
   border-radius: 50%;
 `;
 
@@ -100,6 +149,22 @@ const BtnRow = styled.div`
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+`;
+
+const PrimaryBtn = styled.a`
+  background: #f6851b;
+  color: #ffffff;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  &:hover { background: #e07400; }
 `;
 
 const SecondaryBtn = styled.a`
@@ -325,6 +390,45 @@ const ChainFeatured = styled.div`
   font-weight: 400;
 `;
 
+const CtaSection = styled.div`
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 4rem;
+`;
+
+const CtaTitle = styled.h2`
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+`;
+
+const CtaSub = styled.p`
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 2rem;
+  font-weight: 300;
+`;
+
+const CtaBtn = styled.a`
+  background: #f6851b;
+  color: #ffffff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  &:hover { background: #e07400; }
+`;
+
 const Footer = styled.footer`
   border-top: 1px solid #f0f0f0;
   padding-top: 2rem;
@@ -355,6 +459,17 @@ const Divider = styled.div`
   margin-bottom: 5rem;
 `;
 
+const MetaMaskIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 35 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M32.9583 1L19.8242 10.7183L22.2666 4.99099L32.9583 1Z" fill="#E17726" stroke="#E17726" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M2.04834 1L15.0707 10.809L12.7398 4.99099L2.04834 1Z" fill="#E27625" stroke="#E27625" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M28.2292 23.5334L24.7346 28.872L32.2521 30.9324L34.4088 23.6501L28.2292 23.5334Z" fill="#E27625" stroke="#E27625" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M0.608154 23.6501L2.75153 30.9324L10.2557 28.872L6.77434 23.5334L0.608154 23.6501Z" fill="#E27625" stroke="#E27625" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const SNAP_URL = 'https://snaps.metamask.io/snap/npm/yigitkara/chain-guardian/';
+
 const Index = () => (
   <>
     <GlobalStyle />
@@ -368,19 +483,27 @@ const Index = () => (
           </LogoIcon>
           Chain Guardian
         </Logo>
-        <NavBtn
-          href="https://github.com/YigitKara/chain-guardian"
-          target="_blank"
-        >
-          View on GitHub
-        </NavBtn>
+        <NavLinks>
+          <NavBtnOutline href="https://github.com/YigitKara/chain-guardian" target="_blank">
+            GitHub
+          </NavBtnOutline>
+          <NavBtn href={SNAP_URL} target="_blank">
+            Add to MetaMask
+          </NavBtn>
+        </NavLinks>
       </Nav>
 
       <Hero>
-        <Badge>
-          <BadgeDot />
-          Approved MetaMask Snap
-        </Badge>
+        <BadgeRow>
+          <Badge>
+            <BadgeDot />
+            Approved MetaMask Snap
+          </Badge>
+          <MetaMaskBadge href={SNAP_URL} target="_blank">
+            <MetaMaskDot />
+            Listed on MetaMask Snaps Directory
+          </MetaMaskBadge>
+        </BadgeRow>
         <H1>Never send crypto to the wrong blockchain</H1>
         <Sub>
           Chain Guardian watches every transaction you make in MetaMask and
@@ -388,10 +511,11 @@ const Index = () => (
           blockchain network.
         </Sub>
         <BtnRow>
-          <SecondaryBtn
-            href="https://github.com/YigitKara/chain-guardian"
-            target="_blank"
-          >
+          <PrimaryBtn href={SNAP_URL} target="_blank">
+            <MetaMaskIcon />
+            Add to MetaMask — It&apos;s free
+          </PrimaryBtn>
+          <SecondaryBtn href="https://github.com/YigitKara/chain-guardian" target="_blank">
             View source code
           </SecondaryBtn>
         </BtnRow>
@@ -411,8 +535,7 @@ const Index = () => (
           <WarningBody>
             <WarningMsg>
               This address appears to be a Solana address. You are currently on
-              Ethereum Mainnet. Sending funds here will result in permanent
-              loss.
+              Ethereum Mainnet. Sending funds here will result in permanent loss.
             </WarningMsg>
             <WarningAddress>
               7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
@@ -437,9 +560,7 @@ const Index = () => (
       <Divider>
         <SectionLabel>How it works</SectionLabel>
         <SectionTitle>Three steps, zero configuration</SectionTitle>
-        <SectionSub>
-          Install once, protected forever. No setup required.
-        </SectionSub>
+        <SectionSub>Install once, protected forever. No setup required.</SectionSub>
         <Steps>
           <Step>
             <StepNum>01</StepNum>
@@ -472,8 +593,7 @@ const Index = () => (
         <SectionLabel>Supported networks</SectionLabel>
         <SectionTitle>10+ blockchains protected</SectionTitle>
         <SectionSub>
-          Chain Guardian detects address mismatches across all major blockchain
-          ecosystems.
+          Chain Guardian detects address mismatches across all major blockchain ecosystems.
         </SectionSub>
         <ChainGrid>
           <ChainFeatured>Ethereum</ChainFeatured>
@@ -495,19 +615,27 @@ const Index = () => (
         </ChainGrid>
       </ChainSection>
 
+      <CtaSection>
+        <CtaTitle>Start protecting your transactions today</CtaTitle>
+        <CtaSub>
+          Free, open source, and takes 10 seconds to install. Works automatically on every transaction.
+        </CtaSub>
+        <CtaBtn href={SNAP_URL} target="_blank">
+          <MetaMaskIcon />
+          Add to MetaMask — It&apos;s free
+        </CtaBtn>
+      </CtaSection>
+
       <Footer>
-        <FooterLeft>2026 Chain Guardian - Free and open source</FooterLeft>
+        <FooterLeft>© 2026 Chain Guardian — Free and open source</FooterLeft>
         <FooterLinks>
-          <FooterLink
-            href="https://github.com/YigitKara/chain-guardian"
-            target="_blank"
-          >
+          <FooterLink href={SNAP_URL} target="_blank">
+            MetaMask Directory
+          </FooterLink>
+          <FooterLink href="https://github.com/YigitKara/chain-guardian" target="_blank">
             GitHub
           </FooterLink>
-          <FooterLink
-            href="https://www.npmjs.com/package/@yigitkara/chain-guardian"
-            target="_blank"
-          >
+          <FooterLink href="https://www.npmjs.com/package/@yigitkara/chain-guardian" target="_blank">
             npm
           </FooterLink>
         </FooterLinks>
