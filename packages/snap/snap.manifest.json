@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Detects cross-chain address mismatches in real time, protecting your funds from being permanently lost.",
   "proposedName": "Chain Guardian",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/YigitKara/chain-guardian.git"
   },
   "source": {
-    "shasum": "z1Z5zz7zI8qpGLFErKa+xvx+fHaO60ny8CTY5WI+rvU=",
+    "shasum": "YIGNQqpEYWzAjkJvA17bU1kVMX9cPhGaGXfYyBjv7WQ=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
