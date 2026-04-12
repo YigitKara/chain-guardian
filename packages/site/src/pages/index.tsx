@@ -115,7 +115,9 @@ const MetaMaskBadge = styled.a`
   text-decoration: none;
   font-weight: 500;
   cursor: pointer;
-  &:hover { background: #fff0e0; }
+  &:hover {
+    background: #fff0e0;
+  }
 `;
 
 const MetaMaskDot = styled.div`
@@ -164,7 +166,9 @@ const PrimaryBtn = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  &:hover { background: #e07400; }
+  &:hover {
+    background: #e07400;
+  }
 `;
 
 const SecondaryBtn = styled.a`
@@ -426,7 +430,9 @@ const CtaBtn = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  &:hover { background: #e07400; }
+  &:hover {
+    background: #e07400;
+  }
 `;
 
 const Footer = styled.footer`
@@ -460,11 +466,45 @@ const Divider = styled.div`
 `;
 
 const MetaMaskIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 35 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32.9583 1L19.8242 10.7183L22.2666 4.99099L32.9583 1Z" fill="#E17726" stroke="#E17726" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M2.04834 1L15.0707 10.809L12.7398 4.99099L2.04834 1Z" fill="#E27625" stroke="#E27625" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M28.2292 23.5334L24.7346 28.872L32.2521 30.9324L34.4088 23.6501L28.2292 23.5334Z" fill="#E27625" stroke="#E27625" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M0.608154 23.6501L2.75153 30.9324L10.2557 28.872L6.77434 23.5334L0.608154 23.6501Z" fill="#E27625" stroke="#E27625" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 35 33"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M32.9583 1L19.8242 10.7183L22.2666 4.99099L32.9583 1Z"
+      fill="#E17726"
+      stroke="#E17726"
+      strokeWidth="0.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2.04834 1L15.0707 10.809L12.7398 4.99099L2.04834 1Z"
+      fill="#E27625"
+      stroke="#E27625"
+      strokeWidth="0.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M28.2292 23.5334L24.7346 28.872L32.2521 30.9324L34.4088 23.6501L28.2292 23.5334Z"
+      fill="#E27625"
+      stroke="#E27625"
+      strokeWidth="0.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M0.608154 23.6501L2.75153 30.9324L10.2557 28.872L6.77434 23.5334L0.608154 23.6501Z"
+      fill="#E27625"
+      stroke="#E27625"
+      strokeWidth="0.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -484,7 +524,10 @@ const Index = () => (
           Chain Guardian
         </Logo>
         <NavLinks>
-          <NavBtnOutline href="https://github.com/YigitKara/chain-guardian" target="_blank">
+          <NavBtnOutline
+            href="https://github.com/YigitKara/chain-guardian"
+            target="_blank"
+          >
             GitHub
           </NavBtnOutline>
           <NavBtn href={SNAP_URL} target="_blank">
@@ -515,7 +558,10 @@ const Index = () => (
             <MetaMaskIcon />
             Add to MetaMask — It&apos;s free
           </PrimaryBtn>
-          <SecondaryBtn href="https://github.com/YigitKara/chain-guardian" target="_blank">
+          <SecondaryBtn
+            href="https://github.com/YigitKara/chain-guardian"
+            target="_blank"
+          >
             View source code
           </SecondaryBtn>
         </BtnRow>
@@ -535,7 +581,8 @@ const Index = () => (
           <WarningBody>
             <WarningMsg>
               This address appears to be a Solana address. You are currently on
-              Ethereum Mainnet. Sending funds here will result in permanent loss.
+              Ethereum Mainnet. Sending funds here will result in permanent
+              loss.
             </WarningMsg>
             <WarningAddress>
               7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
@@ -560,7 +607,9 @@ const Index = () => (
       <Divider>
         <SectionLabel>How it works</SectionLabel>
         <SectionTitle>Three steps, zero configuration</SectionTitle>
-        <SectionSub>Install once, protected forever. No setup required.</SectionSub>
+        <SectionSub>
+          Install once, protected forever. No setup required.
+        </SectionSub>
         <Steps>
           <Step>
             <StepNum>01</StepNum>
@@ -593,7 +642,8 @@ const Index = () => (
         <SectionLabel>Supported networks</SectionLabel>
         <SectionTitle>10+ blockchains protected</SectionTitle>
         <SectionSub>
-          Chain Guardian detects address mismatches across all major blockchain ecosystems.
+          Chain Guardian detects address mismatches across all major blockchain
+          ecosystems.
         </SectionSub>
         <ChainGrid>
           <ChainFeatured>Ethereum</ChainFeatured>
@@ -618,7 +668,8 @@ const Index = () => (
       <CtaSection>
         <CtaTitle>Start protecting your transactions today</CtaTitle>
         <CtaSub>
-          Free, open source, and takes 10 seconds to install. Works automatically on every transaction.
+          Free, open source, and takes 10 seconds to install. Works
+          automatically on every transaction.
         </CtaSub>
         <CtaBtn href={SNAP_URL} target="_blank">
           <MetaMaskIcon />
@@ -632,10 +683,16 @@ const Index = () => (
           <FooterLink href={SNAP_URL} target="_blank">
             MetaMask Directory
           </FooterLink>
-          <FooterLink href="https://github.com/YigitKara/chain-guardian" target="_blank">
+          <FooterLink
+            href="https://github.com/YigitKara/chain-guardian"
+            target="_blank"
+          >
             GitHub
           </FooterLink>
-          <FooterLink href="https://www.npmjs.com/package/@yigitkara/chain-guardian" target="_blank">
+          <FooterLink
+            href="https://www.npmjs.com/package/@yigitkara/chain-guardian"
+            target="_blank"
+          >
             npm
           </FooterLink>
         </FooterLinks>
