@@ -7,7 +7,7 @@
     "url": "https://github.com/YigitKara/chain-guardian.git"
   },
   "source": {
-    "shasum": "WILL_BE_AUTO_GENERATED",
+    "shasum": "z1Z5zz7zI8qpGLFErKa+xvx+fHaO60ny8CTY5WI+rvU=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -25,6 +25,6 @@
       "snaps": false
     }
   },
-  "platformVersion": "6.0.0",
+  "platformVersion": "10.3.0",
   "manifestVersion": "0.1"
 }
