@@ -6,7 +6,7 @@ import type {
 import { copyable, divider, heading, panel, text } from '@metamask/snaps-sdk';
 
 // ============================================================
-// ADDRESS FORMAT DETECTION (unchanged from v0.1)
+// ADDRESS FORMAT DETECTION
 // Order matters! Most specific checks must come before broad ones.
 // Solana check must be LAST among non-EVM since its regex is broadest.
 // ============================================================
@@ -123,7 +123,7 @@ function isSolanaAddress(address: string): boolean {
 }
 
 // ============================================================
-// CROSS-ECOSYSTEM CHAIN DETECTION (unchanged)
+// CROSS-ECOSYSTEM CHAIN DETECTION
 // ============================================================
 
 type ChainMatch = {
@@ -236,6 +236,65 @@ function detectAddressType(address: string): ChainMatch | null {
 }
 
 // ============================================================
+// EVM CHAIN REGISTRY
+// Public RPC endpoints. Rate-limited but free.
+// For production, swap in paid endpoints (Alchemy, Infura, etc.)
+// MUST be defined before the functions that reference it.
+// ============================================================
+
+type EVMChain = {
+  name: string;
+  rpcUrl: string;
+};
+
+const EVM_CHAINS: Record<string, EVMChain> = {
+  '0x1': {
+    name: 'Ethereum Mainnet',
+    rpcUrl: 'https://eth.llamarpc.com',
+  },
+  '0x89': {
+    name: 'Polygon',
+    rpcUrl: 'https://polygon-rpc.com',
+  },
+  '0x38': {
+    name: 'BNB Smart Chain',
+    rpcUrl: 'https://bsc-dataseed.binance.org',
+  },
+  '0xa86a': {
+    name: 'Avalanche',
+    rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
+  },
+  '0xa': {
+    name: 'Optimism',
+    rpcUrl: 'https://mainnet.optimism.io',
+  },
+  '0xa4b1': {
+    name: 'Arbitrum',
+    rpcUrl: 'https://arb1.arbitrum.io/rpc',
+  },
+  '0x2105': {
+    name: 'Base',
+    rpcUrl: 'https://mainnet.base.org',
+  },
+  '0xe708': {
+    name: 'Linea',
+    rpcUrl: 'https://rpc.linea.build',
+  },
+  '0xfa': {
+    name: 'Fantom',
+    rpcUrl: 'https://rpc.ftm.tools',
+  },
+  '0x19': {
+    name: 'Cronos',
+    rpcUrl: 'https://evm.cronos.org',
+  },
+  '0xaa36a7': {
+    name: 'Sepolia Testnet',
+    rpcUrl: 'https://rpc.sepolia.org',
+  },
+};
+
+// ============================================================
 // CHAIN ID MAPPING
 // ============================================================
 
@@ -263,32 +322,6 @@ function getChainName(chainId: string): string {
   const normalized = normalizeChainId(chainId);
   return EVM_CHAINS[normalized]?.name ?? `Unknown Chain (${chainId})`;
 }
-
-// ============================================================
-// EVM CHAIN REGISTRY
-// Public RPC endpoints. These are rate-limited but free.
-// For production use a paid provider key (Alchemy, Infura, etc.)
-// via an environment-injected config.
-// ============================================================
-
-type EVMChain = {
-  name: string;
-  rpcUrl: string;
-};
-
-const EVM_CHAINS: Record<string, EVMChain> = {
-  '0x1': { name: 'Ethereum Mainnet', rpcUrl: 'https://eth.llamarpc.com' },
-  '0x89': { name: 'Polygon', rpcUrl: 'https://polygon-rpc.com' },
-  '0x38': { name: 'BNB Smart Chain', rpcUrl: 'https://bsc-dataseed.binance.org' },
-  '0xa86a': { name: 'Avalanche', rpcUrl: 'https://api.avax.network/ext/bc/C/rpc' },
-  '0xa': { name: 'Optimism', rpcUrl: 'https://mainnet.optimism.io' },
-  '0xa4b1': { name: 'Arbitrum', rpcUrl: 'https://arb1.arbitrum.io/rpc' },
-  '0x2105': { name: 'Base', rpcUrl: 'https://mainnet.base.org' },
-  '0xe708': { name: 'Linea', rpcUrl: 'https://rpc.linea.build' },
-  '0xfa': { name: 'Fantom', rpcUrl: 'https://rpc.ftm.tools' },
-  '0x19': { name: 'Cronos', rpcUrl: 'https://evm.cronos.org' },
-  '0xaa36a7': { name: 'Sepolia Testnet', rpcUrl: 'https://rpc.sepolia.org' },
-};
 
 // ============================================================
 // EVM CHAIN FINGERPRINTING
@@ -334,8 +367,18 @@ async function fetchChainFingerprint(
 
   try {
     const body = JSON.stringify([
-      { jsonrpc: '2.0', id: 1, method: 'eth_getCode', params: [address, 'latest'] },
-      { jsonrpc: '2.0', id: 2, method: 'eth_getTransactionCount', params: [address, 'latest'] },
+      {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'eth_getCode',
+        params: [address, 'latest'],
+      },
+      {
+        jsonrpc: '2.0',
+        id: 2,
+        method: 'eth_getTransactionCount',
+        params: [address, 'latest'],
+      },
     ]);
 
     const response = await fetch(chain.rpcUrl, {
@@ -404,7 +447,8 @@ async function fetchAllFingerprints(
 
 // ============================================================
 // RISK CLASSIFICATION
-// Converts raw fingerprints into an actionable verdict.
+// Pure function: converts raw fingerprints into an actionable verdict.
+// Exported so it can be unit-tested.
 // ============================================================
 
 type EVMRisk =
@@ -419,19 +463,17 @@ type EVMRisk =
  * @param fingerprints - Fingerprints for all queried chains.
  * @returns A risk verdict.
  */
-function classifyEVMRisk(
+export function classifyEVMRisk(
   currentChainId: string,
   fingerprints: ChainFingerprint[],
 ): EVMRisk {
   const current = fingerprints.find((fp) => fp.chainId === currentChainId);
   const others = fingerprints.filter((fp) => fp.chainId !== currentChainId);
 
-  // If we can't get any data, degrade gracefully.
   if (!current || current.errored) {
     return {
       level: 'safe',
-      reason:
-        'Could not verify cross-chain activity. Format check passed.',
+      reason: 'Could not verify cross-chain activity. Format check passed.',
     };
   }
 
@@ -439,36 +481,33 @@ function classifyEVMRisk(
     (fp) => !fp.errored && (fp.isContract || fp.txCount > 0),
   );
 
-  // DANGEROUS: Address is a contract on another chain but pristine here.
-  // Sending to a contract address that doesn't exist on this chain = funds lost.
   const contractElsewhere = activeElsewhere.filter((fp) => fp.isContract);
   const isContractHere = current.isContract;
   const hasActivityHere = current.txCount > 0 || isContractHere;
 
   if (contractElsewhere.length > 0 && !hasActivityHere) {
+    const chainList = contractElsewhere
+      .map((fp) => fp.chainName)
+      .join(', ');
     return {
       level: 'dangerous',
-      reason: `This address is a smart contract on ${contractElsewhere
-        .map((fp) => fp.chainName)
-        .join(', ')} but has never been used on ${current.chainName}. Sending here will almost certainly result in permanent loss of funds.`,
+      reason: `This address is a smart contract on ${chainList} but has never been used on ${current.chainName}. Sending here will almost certainly result in permanent loss of funds.`,
       evidence: [current, ...contractElsewhere],
     };
   }
 
-  // SUSPICIOUS: Address has significant activity on another chain and
-  // very little (or none) on the current chain. Common for exchange
-  // deposits paid to the wrong network.
   const highActivityThreshold = 10;
   const significantlyMoreActiveElsewhere = activeElsewhere.filter(
     (fp) => fp.txCount > current.txCount + highActivityThreshold,
   );
 
   if (significantlyMoreActiveElsewhere.length > 0 && current.txCount === 0) {
+    const chainList = significantlyMoreActiveElsewhere
+      .map((fp) => `${fp.chainName} (${fp.txCount} txs)`)
+      .join(', ');
     return {
       level: 'suspicious',
-      reason: `This address has activity on ${significantlyMoreActiveElsewhere
-        .map((fp) => `${fp.chainName} (${fp.txCount} txs)`)
-        .join(', ')} but zero activity on ${current.chainName}. You may be sending on the wrong chain.`,
+      reason: `This address has activity on ${chainList} but zero activity on ${current.chainName}. You may be sending on the wrong chain.`,
       evidence: [current, ...significantlyMoreActiveElsewhere],
     };
   }
@@ -483,12 +522,10 @@ function classifyEVMRisk(
 
 // ============================================================
 // CACHING (snap_manageState)
-// Public RPCs are rate-limited. Cache fingerprints for 1 hour per
-// (address, chain) pair. Most wrong-chain mistakes target well-known
-// contracts that will be cache hits.
+// Cache fingerprints for 1 hour per (address, chain) pair.
 // ============================================================
 
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+const CACHE_TTL_MS = 60 * 60 * 1000;
 
 type CacheEntry = {
   fingerprint: ChainFingerprint;
@@ -562,7 +599,12 @@ async function fetchAllFingerprintsCached(
 
   for (const chainId of chainIds) {
     const entry = cache[cacheKey(address, chainId)];
-    if (entry && now - entry.cachedAt < CACHE_TTL_MS && !entry.fingerprint.errored) {
+    const isFresh =
+      entry &&
+      now - entry.cachedAt < CACHE_TTL_MS &&
+      !entry.fingerprint.errored;
+
+    if (isFresh) {
       results.push(entry.fingerprint);
     } else {
       toFetch.push(chainId);
@@ -611,10 +653,11 @@ function buildCrossEcosystemWarning(
   const bridgeList = detected.bridges
     .map((bridge) => `\u2192 ${bridge}`)
     .join('\n');
+  const headingText = `\ud83d\udea8 Wrong Chain Detected!${
+    isPreview ? ' (Preview)' : ''
+  }`;
   return panel([
-    heading(
-      `\ud83d\udea8 Wrong Chain Detected!${isPreview ? ' (Preview)' : ''}`,
-    ),
+    heading(headingText),
     divider(),
     text(`**You are on:** ${currentChainName}`),
     text(`**Address looks like:** ${detected.name}`),
@@ -648,7 +691,9 @@ function buildEVMRiskPanel(
 ) {
   if (risk.level === 'dangerous') {
     const evidenceLines = risk.evidence.map((fp) => {
-      const kind = fp.isContract ? 'smart contract' : `${fp.txCount} transactions`;
+      const kind = fp.isContract
+        ? 'smart contract'
+        : `${fp.txCount} transactions`;
       return `\u2022 ${fp.chainName}: ${kind}`;
     });
     return panel([
@@ -661,7 +706,9 @@ function buildEVMRiskPanel(
       text('**Address activity by chain:**'),
       text(evidenceLines.join('\n')),
       divider(),
-      text('**Funds sent to a contract on the wrong chain are permanently lost.**'),
+      text(
+        '**Funds sent to a contract on the wrong chain are permanently lost.**',
+      ),
       divider(),
       text('**Destination address:**'),
       copyable(toAddress),
@@ -682,7 +729,9 @@ function buildEVMRiskPanel(
       text('**Address activity by chain:**'),
       text(evidenceLines.join('\n')),
       divider(),
-      text('Verify the recipient expects funds on this specific chain before sending.'),
+      text(
+        'Verify the recipient expects funds on this specific chain before sending.',
+      ),
       divider(),
       text('**Destination address:**'),
       copyable(toAddress),
@@ -818,10 +867,11 @@ export const onNameLookup: OnNameLookupHandler = async (request) => {
   const detected = detectAddressType(address);
 
   if (detected && !detected.isEVM) {
+    const message = `\ud83d\udea8 ${detected.name} address on ${currentChainName} \u2014 funds will be lost!`;
     return {
       resolvedDomains: [
         {
-          resolvedDomain: `\ud83d\udea8 ${detected.name} address on ${currentChainName} \u2014 funds will be lost!`,
+          resolvedDomain: message,
           protocol: 'Chain Guardian',
         },
       ],
@@ -829,10 +879,11 @@ export const onNameLookup: OnNameLookupHandler = async (request) => {
   }
 
   if (detected?.isEVM) {
+    const message = `\u2705 EVM address \u2014 compatible with ${currentChainName}`;
     return {
       resolvedDomains: [
         {
-          resolvedDomain: `\u2705 EVM address \u2014 compatible with ${currentChainName}`,
+          resolvedDomain: message,
           protocol: 'Chain Guardian',
         },
       ],
