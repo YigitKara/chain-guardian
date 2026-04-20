@@ -7,7 +7,7 @@
     "url": "https://github.com/YigitKara/chain-guardian.git"
   },
   "source": {
-    "shasum": "REPLACE_WITH_NEW_SHASUM_AFTER_BUILD",
+    "shasum": "2OoSPzFB5NSH2uALn3ccCl4cNdeYZewQrb4/NXnr4Jo=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
