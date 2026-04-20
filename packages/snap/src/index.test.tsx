@@ -1,4 +1,4 @@
-import { classifyEVMRisk } from './index';
+import { classifyEVMRisk } from '.';
 
 type ChainFingerprint = {
   chainId: string;
