@@ -486,9 +486,7 @@ export function classifyEVMRisk(
   const hasActivityHere = current.txCount > 0 || isContractHere;
 
   if (contractElsewhere.length > 0 && !hasActivityHere) {
-    const chainList = contractElsewhere
-      .map((fp) => fp.chainName)
-      .join(', ');
+    const chainList = contractElsewhere.map((fp) => fp.chainName).join(', ');
     return {
       level: 'dangerous',
       reason: `This address is a smart contract on ${chainList} but has never been used on ${current.chainName}. Sending here will almost certainly result in permanent loss of funds.`,
